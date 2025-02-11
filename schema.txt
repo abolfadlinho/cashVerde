@@ -1,0 +1,73 @@
+admins
+
+adminId
+username: string unique
+password: hashed string
+
+
+users
+
+userId
+username: string unique
+password: hashed string
+email: string unique
+phone: string unique
+dob: date
+bankAccount: object //?
+totalPoints: number
+currentPoints: number
+monthPoints: number
+wallet: number float
+city: string ENUM
+neighbourhood: string ENUM
+voucherIds: [voucherId] //array of redeemed voucherIds
+reported: boolean //for irresponsible use of help chat
+createdAt: date
+communities: [communityId]
+//what should change for signing up using social media accounts?
+
+
+chats
+
+chatId
+startDate: date
+mostRecent: object //object having most recent msg object
+msgs: [msgs] //array of objects where each object is a msg -> fields of msg:- sender : boolean (true for admin flase for user), text: string, sentAt: date, seen: boolean //Suggestion: seen could only have effect when sender is admin. Users will not like being left on seen (by mistake)
+createdAt: date
+resolved: boolean //?
+
+
+machines
+
+machineId
+name: string
+location: string //link for google maps location, the link contains long and lat that will be used
+notes: string
+active: boolean //not related to maintenance logs, for long periods of maintenance or inconsistent machine sites
+createdAt: date
+
+maintenances
+
+maintenanceId
+machineId: objectId
+date: date
+notes: string
+
+
+communities //this stores private communities only. General ones are determined by users info
+
+communityId
+name: string
+code: string
+owner: userId
+createdAt: date
+
+
+vouchers
+
+voucherId
+image: string //this should be a link to the logo image or src
+text: string
+points: number //required points to collect this voucher
+promoCode: string
+expiry: date
