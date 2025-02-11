@@ -17,6 +17,8 @@ import InfoModal from "@/components/InfoModal";
 import { Colors } from "@/constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import FirebaseAPI from "@/firebase/endpoints";
+import OneInputModal from "@/components/OneInputModal";
 
 interface User {
   name: string;
@@ -44,35 +46,35 @@ const dummyBadges: Badge[] = [
     id: 1,
     name: "Eco Warrior",
     icon: "leaf",
-    notes: "Recycled 5+ items",
+    notes: "Collected 5+ points",
     threshold: 5,
   },
   {
     id: 2,
     name: "Recycle Master",
     icon: "star",
-    notes: "Recycled 10+ items",
+    notes: "Collected 10+ points",
     threshold: 10,
   },
   {
     id: 3,
     name: "Waste Reducer",
     icon: "trash",
-    notes: "Recycled 25+ items",
+    notes: "Collected 25+ points",
     threshold: 25,
   },
   {
     id: 4,
     name: "Green Innovator",
     icon: "bulb",
-    notes: "Recycled 50+ items",
+    notes: "Collected 50+ points",
     threshold: 50,
   },
   {
     id: 5,
     name: "Sustainability Champion",
     icon: "trophy",
-    notes: "Recycled 100+ items",
+    notes: "Collected 100+ points",
     threshold: 100,
   },
 ];
@@ -87,7 +89,9 @@ const Profile = () => {
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null);
   const [isConvertModalVisible, setConvertModalVisible] = useState(false);
   const [isSendModalVisible, setSendModalVisible] = useState(false);
+  const [isBankModalVisible, setBankModalVisible] = useState(false);
   const { userDetails } = useAuth();
+  const [bankAccount, setBankAccount] = useState("");
   const router = useRouter();
 
   const openModal = (badge: Badge) => {
@@ -102,6 +106,11 @@ const Profile = () => {
 
   const handleMaintenanceLog = () => {
     navigation.navigate("MaintenanceLog");
+  };
+
+  const handleConvertPoints = async () => {
+    setConvertModalVisible(false);
+    FirebaseAPI.convertPointsToCash(userDetails?.userId);
   };
 
   const renderBadges = ({ item }: { item: Badge }) => (
@@ -138,8 +147,12 @@ const Profile = () => {
         </View>
         <View style={styles.walletButtonsRow}>
           <TouchableOpacity
-            style={styles.walletButton}
+            style={[
+              styles.walletButton,
+              userDetails?.currentPoints === 0 && styles.walletButtonDisabled, // Apply disabled style
+            ]}
             onPress={() => setConvertModalVisible(true)}
+            disabled={userDetails?.currentPoints === 0} // Disable button if currentPoints is 0
           >
             <Text style={styles.walletButtonText}>Convert Points to Cash</Text>
           </TouchableOpacity>
@@ -149,14 +162,34 @@ const Profile = () => {
         <Text style={styles.sectionTitle}>💸 Wallet</Text>
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
-            <Text style={styles.statNumber}>{userDetails?.wallet}</Text>
+            <Text style={styles.statNumber}>
+              {userDetails?.wallet !== undefined && userDetails?.wallet !== null
+                ? userDetails.wallet.toFixed(2)
+                : "0.00"}
+            </Text>
             <Text style={styles.statLabel}>EGP</Text>
           </View>
         </View>
         <View style={styles.walletButtonsRow}>
           <TouchableOpacity
-            style={styles.walletButton}
+            style={[
+              styles.walletButton,
+              (userDetails?.wallet ?? 0) < 50 && styles.walletButtonDisabled, // Apply disabled style
+            ]}
+            onPress={() => {
+              setBankModalVisible(true);
+            }}
+            disabled={(userDetails?.wallet ?? 0) < 50} // Disable button if currentPoints is 0
+          >
+            <Text style={styles.walletButtonText}>Set Bank Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.walletButton,
+              (userDetails?.wallet ?? 0) < 50 && styles.walletButtonDisabled, // Apply disabled style
+            ]}
             onPress={() => setSendModalVisible(true)}
+            disabled={(userDetails?.wallet ?? 0) < 50} // Disable button if currentPoints is 0
           >
             <Text style={styles.walletButtonText}>Send Cash to Bank</Text>
           </TouchableOpacity>
@@ -181,6 +214,25 @@ const Profile = () => {
     />
   );
 
+  const renderBankModal = (isVisible: boolean) => (
+    <OneInputModal
+      visible={isBankModalVisible}
+      title={
+        "BANK" +
+        (typeof userDetails?.bankAccount === "string"
+          ? userDetails.bankAccount
+          : "")
+      }
+      onClose={() => setBankModalVisible(false)}
+      onAction={handleBankAccountInput}
+      placeholder="Enter your bank account number"
+      actionText="Confirm"
+      inputValue={bankAccount}
+      setInputValue={setBankAccount}
+      inputType="default"
+    />
+  );
+
   const handleSignOut = async () => {
     await auth.signOut();
     router.replace({ pathname: "../../" });
@@ -191,6 +243,8 @@ const Profile = () => {
       voucherIds: userDetails?.voucherIds ?? [],
     });
   };
+
+  const handleBankAccountInput = async () => {};
 
   const renderActionButtons = () => (
     <View style={styles.actionsSection}>
@@ -270,7 +324,7 @@ const Profile = () => {
             {renderActionButtons()}
             {renderConfirmationModal(
               isConvertModalVisible,
-              () => setConvertModalVisible(false),
+              handleConvertPoints,
               "convert your points to cash"
             )}
             {renderConfirmationModal(
@@ -278,6 +332,7 @@ const Profile = () => {
               () => setSendModalVisible(false),
               "send cash to your bank account"
             )}
+            {renderBankModal(isBankModalVisible)}
           </>
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -431,6 +486,9 @@ const styles = StyleSheet.create({
   walletButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  walletButtonDisabled: {
+    backgroundColor: Colors.locked, // Greyed-out color for disabled state
   },
 });
 

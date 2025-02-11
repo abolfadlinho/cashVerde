@@ -127,7 +127,7 @@ const HomePage: React.FC = () => {
           </Text>
           <Text style={styles.encouragingText}>
             {userDetails?.totalPoints === 0
-              ? "Start making an impact! 🌱"
+              ? "Start making an impact! 🏁"
               : "Keep it up! 🌟"}
           </Text>
         </View>

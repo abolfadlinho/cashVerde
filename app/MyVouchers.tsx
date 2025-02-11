@@ -62,6 +62,16 @@ const MyVouchers = () => {
         <View style={styles.bodySection}>
           {loading ? (
             <Text style={styles.loadingText}>Loading...</Text>
+          ) : vouchers.length === 0 ? (
+            <Text
+              style={{
+                fontSize: 20,
+                color: Colors.greyText,
+                fontStyle: "italic",
+              }}
+            >
+              No vouchers yet
+            </Text>
           ) : (
             <FlatList
               data={vouchers}
@@ -121,8 +131,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryColor,
     alignItems: "center",
     marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
   },
   headerTitle: {
     fontSize: 28,

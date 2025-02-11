@@ -246,6 +246,19 @@ const getMachinesForDisplay = async () => {
   }
 };
 
+const setBankAccount = async (userId, bankAccount) => {
+  try {
+    const userRef = doc(usersRef, userId);
+    await updateDoc(userRef, {
+      bankAccount
+    });
+    return { bankAccount };
+  } catch (error) {
+    console.error("Error fetching machines:", error);
+    throw error;
+  }
+}
+
 const getMaintenanceLog = async () => {
   try {
     const querySnapshot = await getDocs(machinesRef);
@@ -286,9 +299,6 @@ const getMaintenanceLog = async () => {
           )
           .sort((a, b) => a.date - b.date); // Sort by date in ascending order
 
-        // Select the nearest upcoming maintenance (if available)
-        const nearestMaintenance = upcomingMaintenances.length > 0 ? upcomingMaintenances[0] : null;
-
         return {
           id: doc.id,
           name: data.name,
@@ -302,7 +312,8 @@ const getMaintenanceLog = async () => {
             : null,
         };
       })
-      .filter(machine => machine !== null); // Remove null values (inactive machines)
+      .filter(machine => machine?.maintenance !== null)
+      .filter(machine => machine !== null ); // Remove null values (inactive machines)
 
     return machines;
   } catch (error) {
@@ -611,6 +622,28 @@ const fetchMyVouchers = async (voucherIds) => {
   }
 };
 
+const convertPointsToCash = async (userId) => {
+  try {
+    const userRef = doc(usersRef, userId);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      throw new Error("User not found");
+    }
+    const currentPoints = userSnap.data().currentPoints || 0;
+    const wallet = userSnap.data().wallet || 0;
+    const cash = currentPoints * 0.1;
+    await updateDoc(userRef, {
+      currentPoints: 0,
+      wallet: wallet + cash
+    });
+    console.log("Points converted to cash:", cash);
+    return { newWallet: wallet + cash };
+  } catch (error) {
+    console.error("Error converting points to cash:", error);
+    throw error;
+  }
+}
+
 function extractDate(expiry) {
   const milliseconds = expiry.seconds * 1000 + expiry.nanoseconds / 1000000;
   const date = new Date(milliseconds);
@@ -647,6 +680,8 @@ const FirebaseAPI = {
   getMaintenanceLog,
   redeemVoucher,
   fetchMyVouchers,
+  convertPointsToCash,
+  setBankAccount,
 };
 
 export default FirebaseAPI;

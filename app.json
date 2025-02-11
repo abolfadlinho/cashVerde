@@ -14,6 +14,9 @@
         "NSLocationWhenInUseUsageDescription": "We need your location to provide the best experience."
       }
     },
+    "expo": {
+    "userInterfaceStyle": "automatic"
+  },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

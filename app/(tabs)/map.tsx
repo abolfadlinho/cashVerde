@@ -292,7 +292,6 @@ const styles = StyleSheet.create({
   distanceText: {
     fontSize: 14,
     color: Colors.greyText,
-    marginLeft: 5,
     marginRight: 10,
   },
   cardContent: { flex: 1 },

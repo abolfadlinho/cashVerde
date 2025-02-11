@@ -163,8 +163,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryColor,
     alignItems: "center",
     marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
   },
   communityName: {
     fontSize: 28,

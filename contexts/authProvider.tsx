@@ -6,7 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 
 export interface UserDetails {
@@ -43,31 +43,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const authInstance = getAuth();
-    const unsubscribe = onAuthStateChanged(
-      authInstance,
-      async (currentUser) => {
-        if (currentUser) {
-          setUserLoggedIn(true);
-          setUser(currentUser);
+    const unsubscribeAuth = onAuthStateChanged(authInstance, (currentUser) => {
+      if (currentUser) {
+        setUserLoggedIn(true);
+        setUser(currentUser);
 
-          // Fetch user details from Firestore
-          const userDocRef = doc(db, "users", currentUser.uid);
-          const userDocSnap = await getDoc(userDocRef);
-
-          if (userDocSnap.exists()) {
-            setUserDetails(userDocSnap.data() as UserDetails);
+        // Set up real-time listener for user details
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
+          if (docSnap.exists()) {
+            setUserDetails(docSnap.data() as UserDetails);
           } else {
             console.error("User document not found in Firestore");
+            setUserDetails(null);
           }
-        } else {
-          setUserLoggedIn(false);
-          setUser(null);
-          setUserDetails(null);
-        }
-      }
-    );
+        });
 
-    return () => unsubscribe();
+        return () => unsubscribeFirestore(); // Cleanup Firestore listener
+      } else {
+        setUserLoggedIn(false);
+        setUser(null);
+        setUserDetails(null);
+      }
+    });
+
+    return () => unsubscribeAuth(); // Cleanup Auth listener
   }, []);
 
   return (

@@ -97,7 +97,6 @@ const MaintenanceLog = () => {
                           {item.maintenance.map(
                             (maintenance: any, index: number) => (
                               <View key={index} style={{ marginTop: 5 }}>
-                                {" "}
                                 {/* Ensures each is separate */}
                                 <Text style={styles.distanceText}>
                                   {`Maintenance on ${new Date(
@@ -175,7 +174,6 @@ const styles = StyleSheet.create({
   distanceText: {
     fontSize: 14,
     color: Colors.greyText,
-    marginLeft: 5,
     marginRight: 10,
   },
   cardContent: { flex: 1 },
