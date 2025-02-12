@@ -63,15 +63,17 @@ const MyVouchers = () => {
           {loading ? (
             <Text style={styles.loadingText}>Loading...</Text>
           ) : vouchers.length === 0 ? (
-            <Text
-              style={{
-                fontSize: 20,
-                color: Colors.greyText,
-                fontStyle: "italic",
-              }}
-            >
-              No vouchers yet
-            </Text>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: Colors.greyText,
+                  fontStyle: "italic",
+                }}
+              >
+                No vouchers yet
+              </Text>
+            </View>
           ) : (
             <FlatList
               data={vouchers}

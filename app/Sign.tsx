@@ -167,7 +167,7 @@ const Sign = () => {
           email,
           password,
           username,
-          phone,
+          "+20" + phone,
           dob,
           selectedCity,
           selectedNeighbourhood
@@ -242,13 +242,26 @@ const Sign = () => {
                 value={username}
                 onChangeText={setUsername}
               />
-              <TextInput
-                style={styles.input}
-                placeholder="Phone"
-                value={phone}
-                onChangeText={setPhone}
-                keyboardType="phone-pad"
-              />
+              <View
+                style={[
+                  styles.input,
+                  { flexDirection: "row", alignItems: "center" },
+                ]}
+              >
+                <Text style={{ marginRight: 10 }}>🇪🇬+20</Text>
+                <TextInput
+                  style={{ flex: 1 }}
+                  placeholder="Phone"
+                  value={phone}
+                  onChangeText={(text) => {
+                    if (/^1\d*$/.test(text) || text === "") {
+                      setPhone(text); // Only update if it starts with '1'
+                    }
+                  }}
+                  keyboardType="phone-pad"
+                  maxLength={10}
+                />
+              </View>
               <TouchableOpacity
                 onPress={showDatePicker}
                 style={styles.dateInput}

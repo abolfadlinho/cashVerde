@@ -12,14 +12,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useAuth } from "../../contexts/authProvider";
-import { auth, db } from "../../firebase/firebase";
 import { useNavigation } from "@react-navigation/native";
 import FirebaseAPI from "../../firebase/endpoints";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import HelpModal from "@/components/HelpModal";
-import Slider from "@/components/Slider";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Colors } from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -32,6 +31,7 @@ interface Slide {
 
 type RootStackParamList = {
   Chat: undefined;
+  Scanner: undefined;
 };
 
 const HomePage: React.FC = () => {
@@ -101,9 +101,20 @@ const HomePage: React.FC = () => {
     navigation.navigate("Chat");
   };
 
+  const handleScanner = () => {
+    navigation.navigate("Scanner");
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Image
+            source={require("../../assets/images/wide.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
         <View style={styles.statsSection}>
           <Text style={styles.statsText}>
             👋 Hi <Text style={styles.highlight}>{userDetails?.username}</Text>{" "}
@@ -154,6 +165,16 @@ const HomePage: React.FC = () => {
           />
         )}
 
+        <TouchableOpacity style={styles.button} onPress={handleScanner}>
+          <Ionicons
+            name="scan-outline"
+            size={40}
+            color="white"
+            style={styles.icon}
+          />
+          <Text style={styles.buttonText}>Scan Machine QR Code</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.helpButton}
           onPress={() => setHelpModalVisible(true)}
@@ -202,7 +223,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   carouselSection: {
-    marginBottom: 24,
+    marginBottom: 14,
   },
   carouselTitle: {
     fontSize: 18,
@@ -253,7 +274,7 @@ const styles = StyleSheet.create({
   },
   helpButton: {
     position: "absolute",
-    bottom: 80,
+    bottom: 70,
     right: 20,
     backgroundColor: Colors.primaryColor,
     borderRadius: 25,
@@ -263,6 +284,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+  },
+  logo: {
+    width: 300,
+    height: 100,
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.primaryColor,
+    width: "60%",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5, // Shadow for Android
+  },
+  icon: {
+    marginRight: 8, // Space between icon and text
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

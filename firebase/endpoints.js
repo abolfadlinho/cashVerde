@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, addDoc, getDoc, getDocs, updateDoc, deleteDoc, doc, query, where, arrayUnion } from "firebase/firestore";
+import { collection, addDoc, getDoc, getDocs, updateDoc, deleteDoc, doc, query, where, arrayUnion, writeBatch, increment } from "firebase/firestore";
 
 // Collection references
 const adminsRef = collection(db, "admins");
@@ -644,6 +644,25 @@ const convertPointsToCash = async (userId) => {
   }
 }
 
+const sendCashToBank = async (userId) => {
+  try {
+    const userRef = doc(usersRef, userId);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      throw new Error("User not found");
+    }
+    const wallet = userSnap.data().wallet || 0;
+    await updateDoc(userRef, {
+      wallet: 0
+    });
+    console.log("Cash sent to bank:", wallet);
+    return { newWallet: 0 };
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error sending to bank");
+  }
+}
+
 function extractDate(expiry) {
   const milliseconds = expiry.seconds * 1000 + expiry.nanoseconds / 1000000;
   const date = new Date(milliseconds);
@@ -651,6 +670,41 @@ function extractDate(expiry) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   return  day + "-" +  month + "-" + year;
+}
+
+const scan = async (userId, name, points) => {
+  try {
+    const q = query(machinesRef, where("name", "==", name));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      throw new Error("Machine not found");
+    }
+
+    const machineSnap = querySnapshot.docs[0];
+    const machineRef = doc(machinesRef, machineSnap.id);
+    const lastScan = machineSnap.data().lastScan ? machineSnap.data().lastScan.toDate() : null;
+    const now = new Date();
+
+    if (!lastScan || (now - lastScan) > 5 * 60 * 1000) {
+      await updateDoc(machineRef, { lastScan: now });
+
+      const userRef = doc(usersRef, userId);
+      await updateDoc(userRef, {
+        totalPoints: increment(points),
+        currentPoints: increment(points),
+        monthPoints: increment(points)
+      });
+
+      return { success: true, message: "Points updated successfully" };
+    } else {
+      throw new Error("Machine was scanned less than 5 minutes ago");
+    }
+
+  } catch(error) {
+    console.log(error);
+    throw new Error("Error scanning");
+  }
 }
 
 
@@ -682,6 +736,8 @@ const FirebaseAPI = {
   fetchMyVouchers,
   convertPointsToCash,
   setBankAccount,
+  sendCashToBank,
+  scan,
 };
 
 export default FirebaseAPI;
