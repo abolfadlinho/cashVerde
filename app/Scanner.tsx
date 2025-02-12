@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -6,10 +7,14 @@ import {
   SafeAreaView,
   Alert,
   Button,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useAuth } from "../contexts/authProvider";
 import FirebaseAPI from "@/firebase/endpoints";
+import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 
 const Scanner = () => {
@@ -17,8 +22,9 @@ const Scanner = () => {
   const [points, setPoints] = useState(0);
   const [scanned, setScanned] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
-  const [isProcessing, setIsProcessing] = useState(false); // Flag to track processing state
+  const [confirmed, setConfirmed] = useState(false);
   const { userDetails } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -37,15 +43,6 @@ const Scanner = () => {
       if (parsedData.machineName && parsedData.points) {
         setMachineName(parsedData.machineName);
         setPoints(parsedData.points);
-        await FirebaseAPI.scan(
-          userDetails?.userId || "",
-          parsedData.machineName,
-          parsedData.points
-        );
-        Alert.alert(
-          "Scan Successful",
-          `You received ${parsedData.points} points!`
-        );
       } else {
         Alert.alert(
           "Invalid QR Code",
@@ -55,8 +52,20 @@ const Scanner = () => {
     } catch (error) {
       console.log(error);
       Alert.alert("Scanner Error", String(error));
-    } finally {
-      setIsProcessing(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setConfirmed(true);
+      await FirebaseAPI.scan(userDetails?.userId || "", machineName, points);
+      Alert.alert("Scan Successful", `You received ${points} points!`);
+      router.replace({ pathname: "/(tabs)/home" });
+    } catch (error) {
+      setConfirmed(false);
+      console.log(error);
+      Alert.alert("Error", "Machine was scanned less than 5 minutes ago.");
+      router.replace({ pathname: "/(tabs)/home" });
     }
   };
 
@@ -78,39 +87,64 @@ const Scanner = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.topContainer}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Scanner</Text>
+          <Ionicons name="qr-code-outline" size={36} color="white" />
+          <Text style={styles.headerTitle}>QR Scanner</Text>
         </View>
+
         <View style={styles.bodySection}>
           {scanned ? (
             <View style={styles.scanResultContainer}>
               <Text style={styles.scanResultText}>
-                Points received: {points}
+                <Text style={styles.bold}>{machineName}</Text>
               </Text>
-              <Button title="Scan Again" onPress={resetScanner} />
+              <Text style={styles.scanResultText}>
+                ⚡<Text style={styles.bold}>{points}</Text> points earned!
+              </Text>
+
+              {!confirmed && (
+                <TouchableOpacity
+                  style={styles.confirmButton}
+                  onPress={handleSubmit}
+                >
+                  <Ionicons name="checkmark-circle" size={24} color="white" />
+                  <Text style={styles.confirmButtonText}>Confirm</Text>
+                </TouchableOpacity>
+              )}
+              {confirmed && (
+                <ActivityIndicator size="large" color={Colors.primaryColor} />
+              )}
+              <Image
+                source={require("../assets/images/krabs.gif")}
+                resizeMode="contain"
+                style={{ width: "90%" }}
+              />
+              <TouchableOpacity
+                style={styles.scanAgainButton}
+                onPress={resetScanner}
+              >
+                <Ionicons name="refresh-circle" size={24} color="white" />
+                <Text style={styles.scanAgainButtonText}>Scan Again</Text>
+              </TouchableOpacity>
             </View>
           ) : (
-            <CameraView
-              style={styles.camera}
-              onBarcodeScanned={
-                scanned || isProcessing
-                  ? undefined
-                  : (event) => {
-                      if (!isProcessing) {
-                        setIsProcessing(true);
-                        handleScan(event.data);
-                      }
-                    }
-              }
-              barcodeScannerSettings={{
-                barcodeTypes: ["qr"],
-              }}
-            >
-              <View style={styles.overlay}>
-                <Text style={styles.overlayText}>
-                  Scan the QR code on the machine.
-                </Text>
-              </View>
-            </CameraView>
+            <>
+              {!scanned && (
+                <CameraView
+                  style={styles.camera}
+                  onBarcodeScanned={(event) => handleScan(event.data)}
+                  barcodeScannerSettings={{
+                    barcodeTypes: ["qr"],
+                  }}
+                >
+                  <View style={styles.overlay}>
+                    <Ionicons name="scan-outline" size={50} color="white" />
+                    <Text style={styles.overlayText}>
+                      Scan the QR code on the machine 📷
+                    </Text>
+                  </View>
+                </CameraView>
+              )}
+            </>
           )}
         </View>
       </View>
@@ -131,6 +165,9 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: Colors.primaryColor,
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
     marginBottom: 24,
   },
   headerTitle: {
@@ -154,6 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.whiteColor,
     textAlign: "center",
+    marginTop: 10,
   },
   scanResultContainer: {
     flex: 1,
@@ -165,6 +203,50 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: Colors.greenText,
     marginBottom: 16,
+    textAlign: "center",
+  },
+  bold: {
+    fontWeight: "bold",
+  },
+  confirmButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.primaryColor,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  confirmButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 8,
+  },
+  scanAgainButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.secondaryColor,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  scanAgainButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 8,
   },
 });
 

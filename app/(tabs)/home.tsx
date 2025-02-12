@@ -83,7 +83,11 @@ const HomePage: React.FC = () => {
 
     return (
       <View style={styles.slideContainer}>
-        <Image source={{ uri: item.image }} style={styles.slideImage} />
+        <Image
+          source={{ uri: item.image }}
+          style={styles.slideImage}
+          defaultSource={require("../../assets/images/CashVerde.png")} // Add a placeholder image
+        />
         <Text style={styles.slideText}>{item.text}</Text>
         <TouchableOpacity
           style={[styles.redeemButton, isDisabled && styles.disabledButton]} // Apply disabled style
