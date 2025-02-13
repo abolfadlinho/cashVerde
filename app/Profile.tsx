@@ -13,56 +13,7 @@ import InfoModal from "@/components/InfoModal";
 import FirebaseAPI from "@/firebase/endpoints";
 import { ActivityIndicator } from "react-native";
 import { Colors } from "@/constants/Colors";
-
-interface RouteParams {
-  userId: string;
-}
-
-interface Badge {
-  id: number;
-  name: string;
-  icon: string;
-  notes: string;
-  threshold: number;
-}
-
-const dummyBadges: Badge[] = [
-  {
-    id: 1,
-    name: "Eco Warrior",
-    icon: "leaf",
-    notes: "Recycled 5+ items",
-    threshold: 5,
-  },
-  {
-    id: 2,
-    name: "Recycle Master",
-    icon: "star",
-    notes: "Recycled 10+ items",
-    threshold: 10,
-  },
-  {
-    id: 3,
-    name: "Waste Reducer",
-    icon: "trash",
-    notes: "Recycled 25+ items",
-    threshold: 25,
-  },
-  {
-    id: 4,
-    name: "Green Innovator",
-    icon: "bulb",
-    notes: "Recycled 50+ items",
-    threshold: 50,
-  },
-  {
-    id: 5,
-    name: "Sustainability Champion",
-    icon: "trophy",
-    notes: "Recycled 100+ items",
-    threshold: 100,
-  },
-];
+import { dummyBadges, Badge } from "@/constants/Types";
 
 const Profile = () => {
   const route = useRoute<RouteProp<{ params: { userId: string } }, "params">>();
@@ -212,7 +163,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -222,7 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 12,
-    color: "#000",
+    color: "#333",
   },
   statsRow: {
     flexDirection: "row",
@@ -246,7 +197,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

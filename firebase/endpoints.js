@@ -9,171 +9,14 @@ const machinesRef = collection(db, "machines");
 const maintenancesRef = collection(db, "maintenances");
 const communitiesRef = collection(db, "communities");
 const vouchersRef = collection(db, "vouchers");
-
-// Utility function to get collection reference dynamically
 const getCollectionRef = (name) => collection(db, name);
 
-const fetchUserDetails = async (userId) => {
-  try {
-    const docSnap = await getDoc(doc(usersRef, userId));
-    if (!docSnap.exists()) {
-      throw new Error("User not found");
-    }
-    return { 
-      currentPoints: docSnap.currentPoints,
-      totalPoints: docSnap.totalPoints,
-      monthPoints: docSnap.monthPoints,
-      wallet: docSnap.wallet,
-      username: docSnap.username,
-      email: docSnap.email,
-      phone: docSnap.phone,
-      dob: docSnap.dob,
-      city: docSnap.city,
-      neighbourhood: docSnap.neighbourhood,
-      communities: docSnap.communities,
-      reported: docSnap.reported,
-      createdAt: docSnap.createdAt,
-      voucherIds: docSnap.voucherIds,
-      userId: docSnap.userId,
-      bankAccount: docSnap.bankAccount,
-      ...docSnap.data() };
-  } catch (error) {
-    console.error("Error fetching user details:", error);
-    throw error;
-  }
-}
-
-const createAdmin = async (data) => {
-  try {
-    const docRef = await addDoc(adminsRef, data);
-    return { id: docRef.id, ...data };
-  } catch (error) {
-    console.error("Error creating admin:", error);
-    throw error;
-  }
-};
-
-// User management
 const createUser = async (data) => {
   try {
     const docRef = await addDoc(usersRef, data);
     return { id: docRef.id, ...data };
   } catch (error) {
     console.error("Error creating user:", error);
-    throw error;
-  }
-};
-
-// Update user details (for social media integration)
-const updateUser = async (id, data) => {
-  try {
-    await updateDoc(doc(usersRef, id), data);
-    return { id, ...data };
-  } catch (error) {
-    console.error("Error updating user:", error);
-    throw error;
-  }
-};
-
-// Get user by username (for login/sign-up)
-const getUserByUsername = async (username) => {
-  try {
-    const q = query(usersRef, where("username", "==", username));
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) {
-      throw new Error("User not found");
-    }
-    const user = querySnapshot.docs[0].data();
-    return { id: querySnapshot.docs[0].id, ...user };
-  } catch (error) {
-    console.error("Error fetching user by username:", error);
-    throw error;
-  }
-};
-
-// Chats management
-const createChat = async (data) => {
-  try {
-    const docRef = await addDoc(chatsRef, data);
-    return { id: docRef.id, ...data };
-  } catch (error) {
-    console.error("Error creating chat:", error);
-    throw error;
-  }
-};
-
-const getChatById = async (id) => {
-  try {
-    const docSnap = await getDoc(doc(chatsRef, id));
-    if (!docSnap.exists()) {
-      throw new Error("Chat not found");
-    }
-    return { id: docSnap.id, ...docSnap.data() };
-  } catch (error) {
-    console.error("Error fetching chat:", error);
-    throw error;
-  }
-};
-
-// Machine management
-const createMachine = async (data) => {
-  try {
-    const docRef = await addDoc(machinesRef, data);
-    return { id: docRef.id, ...data };
-  } catch (error) {
-    console.error("Error creating machine:", error);
-    throw error;
-  }
-};
-
-// Get all machines
-const getMachines = async () => {
-  try {
-    const querySnapshot = await getDocs(machinesRef);
-    const machines = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    return machines;
-  } catch (error) {
-    console.error("Error fetching machines:", error);
-    throw error;
-  }
-};
-
-// Maintenance management
-const createMaintenance = async (data) => {
-  try {
-    const docRef = await addDoc(maintenancesRef, data);
-    return { id: docRef.id, ...data };
-  } catch (error) {
-    console.error("Error creating maintenance record:", error);
-    throw error;
-  }
-};
-
-// Voucher management
-const createVoucher = async (data) => {
-  try {
-    const docRef = await addDoc(vouchersRef, data);
-    return { id: docRef.id, ...data };
-  } catch (error) {
-    console.error("Error creating voucher:", error);
-    throw error;
-  }
-};
-
-// Get all vouchers
-const getVouchers = async () => {
-  try {
-    const querySnapshot = await getDocs(vouchersRef);
-    const vouchers = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    return vouchers;
-  } catch (error) {
-    console.error("Error fetching vouchers:", error);
     throw error;
   }
 };
@@ -465,7 +308,7 @@ const getLeaderboard = async (communityId, fieldValue, fieldName) => {
   }
 }
 
-const generateCode = () => {
+function generateCode()  {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
   for (let i = 0; i < 6; i++) {
@@ -540,7 +383,6 @@ const getUserProfile = async (userId) => {
   }
 };
 
-//will be called on first signin every month
 const resetUsersMonthPoints = async () => {
     console.log('Start of the month task is running...');
     try {
@@ -710,19 +552,8 @@ const scan = async (userId, name, points) => {
 
 // FirebaseAPI object with all necessary functions
 const FirebaseAPI = {
-  fetchUserDetails,
-  createAdmin,
   createUser,
-  updateUser,
-  getUserByUsername,
-  createChat,
-  getChatById,
-  createMachine,
-  getMachines,
-  createMaintenance,
   createCommunity,
-  createVoucher,
-  getVouchers,
   getMachinesForDisplay,
   fetchVouchers,
   fetchCommunitiesUingIds,

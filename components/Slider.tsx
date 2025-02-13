@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   carouselTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
     marginBottom: 12,
   },
   slideContainer: {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 12,
     padding: 16,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginBottom: 12,
-    color: "#000",
+    color: "#333",
   },
   redeemButton: {
     paddingVertical: 10,

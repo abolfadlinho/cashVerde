@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    color: "#000",
+    color: "#333",
   },
 });
 

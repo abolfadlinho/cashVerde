@@ -1,8 +1,3 @@
-/**
- * Colors configuration for the app. 
- * Primary color: Colors.primaryColor, Secondary color: #f1c40f, White: #f5f5f5
- */
-
 const primaryColor = '#27ae60';
 const secondaryColor = '#f1c40f';
 const whiteColor = '#f5f5f5';

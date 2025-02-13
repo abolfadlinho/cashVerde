@@ -194,6 +194,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryColor,
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "#000",
+    borderBottomColor: "#333",
   },
 });

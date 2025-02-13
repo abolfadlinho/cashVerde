@@ -15,33 +15,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuth } from "../contexts/authProvider";
 import FirebaseAPI from "@/firebase/endpoints";
 import { Colors } from "@/constants/Colors";
+import {
+  LeaderboardEntry,
+  Community,
+  RootStackParamList,
+} from "@/constants/Types";
 
-interface LeaderboardEntry {
-  rank: number;
-  username: string;
-  monthPoints: number;
-  userId: string;
-}
-
-interface Community {
-  name: string;
-  rank: number;
-  communityId?: string; //replaced with fieldName in public community
-  code?: string; //replaced with fieldValue in public community
-  owner?: string;
-  createdAt?: string;
-}
-
-type RootStackParamList = {
-  Community: undefined;
-  Profile: { userId: string };
-};
-
-interface RouteParams {
-  community: Community;
-}
-
-const Community = () => {
+const CommunityPage = () => {
   const route =
     useRoute<RouteProp<{ params: { community: Community } }, "params">>();
   const { community } = route.params;
@@ -195,7 +175,7 @@ const styles = StyleSheet.create({
   leaderboardTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
     marginBottom: 12,
   },
   leaderboardItem: {
@@ -206,7 +186,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 3,
@@ -220,7 +200,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    color: "#000",
+    color: "#333",
   },
   monthPoints: {
     fontSize: 16,
@@ -248,4 +228,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Community;
+export default CommunityPage;

@@ -24,6 +24,7 @@ import DropdownSelect from "@/components/DropdownSelect";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import CheckBox from "@/components/CheckBox";
 import InfoModal from "@/components/InfoModal";
+import { dobObject } from "@/constants/Types";
 
 const Sign = () => {
   const auth = useAuth();
@@ -121,12 +122,6 @@ const Sign = () => {
       setLoading(false);
     }
   }, [auth?.userLoggedIn]);
-
-  interface dobObject {
-    day: string;
-    month: string;
-    year: string;
-  }
 
   const handleDobChange = (dob: dobObject) => {
     setDob(dob.year + "-" + dob.month + "-" + dob.day);

@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
     marginBottom: 12,
   },
   modalNotes: {

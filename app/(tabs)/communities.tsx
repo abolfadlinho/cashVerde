@@ -19,20 +19,7 @@ import FirebaseAPI from "@/firebase/endpoints";
 import { ActivityIndicator } from "react-native";
 import CommunityItem from "@/components/CommunityItem";
 import { Colors } from "@/constants/Colors";
-
-interface Community {
-  name: string;
-  rank: number;
-  communityId?: string;
-  code?: string;
-  owner?: string;
-  createdAt?: string;
-}
-
-type RootStackParamList = {
-  Communities: undefined;
-  Community: { community: Community };
-};
+import { Community, RootStackParamList } from "@/constants/Types";
 
 const calculateTimeLeft = () => {
   const now = new Date();
@@ -335,7 +322,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -345,7 +332,7 @@ const styles = StyleSheet.create({
   scoreText: {
     fontSize: 80,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
     marginBottom: 8,
   },
   timerText: {
@@ -359,7 +346,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 12,
-    color: "#000",
+    color: "#333",
     textAlign: "center",
     letterSpacing: 1,
   },
@@ -380,7 +367,8 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 20,
     color: Colors.greenText,
+    fontWeight: "bold",
   },
 });

@@ -20,27 +20,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import FirebaseAPI from "@/firebase/endpoints";
 import OneInputModal from "@/components/OneInputModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-
-interface User {
-  name: string;
-  phoneNumber: string;
-  totalRecycled: number;
-  monthlyRecycled: number;
-}
-
-interface Badge {
-  id: number;
-  name: string;
-  icon: string;
-  notes: string;
-  threshold: number;
-}
-
-type RootStackParamList = {
-  Profile: undefined;
-  MaintenanceLog: undefined;
-  MyVouchers: { voucherIds: string[] };
-};
+import { RootStackParamList, User, Badge } from "@/constants/Types";
 
 const dummyBadges: Badge[] = [
   {
@@ -473,7 +453,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
   },
   userPhone: {
     fontSize: 16,
@@ -484,7 +464,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -494,7 +474,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 12,
-    color: "#000",
+    color: "#333",
   },
   statsRow: {
     flexDirection: "row",
@@ -545,7 +525,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

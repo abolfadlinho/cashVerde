@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 10,
     backgroundColor: "#fff",
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   communityName: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#000",
+    color: "#333",
   },
   communityRank: {
     fontSize: 14,

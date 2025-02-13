@@ -16,14 +16,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuth } from "../contexts/authProvider";
 import FirebaseAPI from "@/firebase/endpoints";
 import { Colors } from "@/constants/Colors";
-
-interface Voucher {
-  id: string;
-  text: string;
-  image: string;
-  expiry: string | null;
-  promoCode: string;
-}
+import { Voucher } from "@/constants/Types";
 
 const MyVouchers = () => {
   const route =
@@ -171,7 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 3,
@@ -185,7 +178,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    color: "#000",
+    color: "#333",
   },
   headerText: {
     fontWeight: "bold",

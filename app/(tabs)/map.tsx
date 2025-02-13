@@ -274,6 +274,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: Colors.greenText,
     textAlign: "center",
+    marginBottom: 10,
   },
   map: { flex: 1, borderRadius: 12 },
   loader: { marginTop: 20 },

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   helpText: {
     fontSize: 16,
     marginLeft: 10,
-    color: "#000",
+    color: "#333",
   },
   modalTitle: {
     fontSize: 20,

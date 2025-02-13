@@ -19,20 +19,9 @@ import HelpModal from "@/components/HelpModal";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import { Slide, RootStackParamList } from "@/constants/Types";
 
 const { width: screenWidth } = Dimensions.get("window");
-
-interface Slide {
-  id: string;
-  image: string;
-  text: string;
-  points: number;
-}
-
-type RootStackParamList = {
-  Chat: undefined;
-  Scanner: undefined;
-};
 
 const HomePage: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>([]);
@@ -232,18 +221,18 @@ const styles = StyleSheet.create({
   carouselTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
     marginBottom: 12,
   },
   slideContainer: {
     width: screenWidth * 0.5,
-    marginHorizontal: screenWidth * 0.01,
+    marginHorizontal: screenWidth * 0.03,
     marginVertical: 8,
     alignItems: "center",
     backgroundColor: "white",
     borderRadius: 12,
     padding: 16,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -260,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginBottom: 12,
-    color: "#000",
+    color: "#333",
   },
   redeemButton: {
     paddingVertical: 10,
@@ -283,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryColor,
     borderRadius: 25,
     padding: 10,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -298,11 +287,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.primaryColor,
-    width: "60%",
+    width: "80%",
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 10,
-    shadowColor: "#000",
+    shadowColor: "#333",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
