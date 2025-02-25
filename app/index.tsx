@@ -1,42 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { View, Image, ActivityIndicator, Dimensions, Text } from "react-native";
+import React, { useEffect } from "react";
+import { View, Image, Dimensions } from "react-native";
 import { useAuth } from "../contexts/authProvider";
 import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
-  withTiming,
   withRepeat,
-  withDelay,
+  withTiming,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { Colors } from "@/constants/Colors";
 
-const { width, height } = Dimensions.get("window");
-
-const NUM_EMOJIS = 30;
+const { width } = Dimensions.get("window");
 
 const Index = () => {
   const auth = useAuth();
   const router = useRouter();
-  const emojiPositions = Array.from({ length: NUM_EMOJIS }, () => ({
-    x: useSharedValue(Math.random() * width - 150),
-    y: useSharedValue(-280),
-    rotate: useSharedValue(Math.random() * 20 - 10),
-  }));
+  const rotate = useSharedValue(0);
 
   useEffect(() => {
-    emojiPositions.forEach((emoji, index) => {
-      emoji.y.value = withDelay(
-        index * 100,
-        withTiming(height - 60, { duration: 3000 })
-      );
-      emoji.rotate.value = withRepeat(
-        withTiming(emoji.rotate.value + 360, { duration: 3000 }),
-        -1,
-        false
-      );
-    });
+    rotate.value = withRepeat(withTiming(360, { duration: 2000 }), -1, false);
 
     const timer = setTimeout(() => {
       if (auth?.userLoggedIn) {
@@ -44,37 +27,23 @@ const Index = () => {
       } else {
         router.replace({ pathname: "/Sign" });
       }
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [auth?.userLoggedIn]);
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotate.value}deg` }],
+  }));
+
   return (
     <View style={styles.container}>
-      <View style={styles.emojis}>
-        {emojiPositions.map((emoji, index) => (
-          <Animated.Text
-            key={index}
-            style={[
-              styles.emoji,
-              useAnimatedStyle(() => ({
-                transform: [
-                  { translateX: emoji.x.value },
-                  { translateY: emoji.y.value },
-                  { rotate: `${emoji.rotate.value}deg` },
-                ],
-              })),
-            ]}
-          >
-            💸
-          </Animated.Text>
-        ))}
-      </View>
       <Image
         source={require("../assets/images/CashVerde.png")}
         style={styles.logo}
         resizeMode="contain"
       />
+      <Animated.Text style={[styles.emoji, animatedStyle]}>💸</Animated.Text>
     </View>
   );
 };
@@ -93,12 +62,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   emoji: {
-    zIndex: 1,
-    position: "absolute",
     fontSize: 52,
-  },
-  emojis: {
-    marginRight: 100,
+    position: "absolute",
+    bottom: 320, // Adjusted to position below the logo
   },
 });
 

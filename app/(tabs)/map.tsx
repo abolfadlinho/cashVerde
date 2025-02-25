@@ -300,7 +300,6 @@ const styles = StyleSheet.create({
   calloutText: {
     fontSize: 14,
     color: Colors.greyText,
-    marginLeft: 5,
     marginRight: 10,
     width: 200,
   },
