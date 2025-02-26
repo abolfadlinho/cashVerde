@@ -4,6 +4,9 @@
 
 **CashVerde** is a React Native app built with TypeScript, Firebase, and Firestore that promotes recycling through an incentive-based system. Users can deposit recyclables into smart disposing machines, scan a QR code to earn points, and redeem these points as money or vouchers for eco-friendly products.
 
+**Presentation**
+📺 **Watch the video:** [Click here](https://drive.google.com/file/d/1gMNA6X_WW-s47Rz-LAZemvKeIUdFrh1q/view?usp=drive_link)
+
 ## Features
 
 ✅ **Recycling Rewards** – Users scan a QR code after disposing recyclables to earn points.  
