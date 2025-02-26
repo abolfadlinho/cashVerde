@@ -1,50 +1,61 @@
-# Welcome to your Expo app 👋
+# CashVerde
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Overview
 
-## Get started
+**CashVerde** is a React Native app built with TypeScript, Firebase, and Firestore that promotes recycling through an incentive-based system. Users can deposit recyclables into smart disposing machines, scan a QR code to earn points, and redeem these points as money or vouchers for eco-friendly products.
 
-1. Install dependencies
+## Features
 
-   ```bash
+✅ **Recycling Rewards** – Users scan a QR code after disposing recyclables to earn points.  
+✅ **Redeem Points** – Convert points into cash or eco-friendly vouchers.  
+✅ **Machine Locator** – View nearby recycling machines on a **map view**.  
+✅ **Maintenance Logs & Warnings** – Users can check machine maintenance logs and receive warnings for unavailable machines.  
+✅ **Competitions & Community** – Users compete with friends and communities based on **monthly points** gained.  
+✅ **User Authentication** – Secure login and account management.
+
+## Tech Stack
+
+- **Frontend:** React Native (TypeScript)
+- **Backend & Database:** Firebase Firestore
+- **Authentication:** Firebase Auth
+- **Mapping:** Google Maps API
+
+## Installation & Setup
+
+### Prerequisites
+
+- Node.js installed
+- Firebase account & Firestore setup
+- Google Maps API key (for map view)
+
+### Steps
+
+1. Clone the repository:
+   ```sh
+   git clone <your-repo-url>
+   cd cashverde
+   ```
+2. Install dependencies:
+   ```sh
    npm install
    ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
+3. Configure Firebase:
+   - Create a `.env` file and add your Firebase credentials
+   - Example:
+     ```env
+     REACT_APP_FIREBASE_API_KEY=your-api-key
+     REACT_APP_FIREBASE_AUTH_DOMAIN=your-auth-domain
+     REACT_APP_FIREBASE_PROJECT_ID=your-project-id
+     ```
+4. Start the development server:
+   ```sh
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+## Contributing
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Feel free to submit issues or pull requests to improve the app! 🚀
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## License
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+MIT License
